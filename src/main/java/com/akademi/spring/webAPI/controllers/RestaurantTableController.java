@@ -19,9 +19,9 @@ public class RestaurantTableController {
     }
 
     @PostMapping("/addRestaurantTable")
-    public ResponseEntity<RestaurantTable> addRestaurantTable(@RequestBody AddRestaurantTableDto addRestaurantTableDto){
+    public ResponseEntity<RestaurantTable> addRestaurantTable(@RequestParam int capacity, @RequestParam int restaurantId){
 
-        var result = restaurantTableService.addRestaurantTable(addRestaurantTableDto);
+        var result = restaurantTableService.addRestaurantTable(capacity, restaurantId);
 
         if (result == null){
             return ResponseEntity.badRequest().body(result);
@@ -77,6 +77,24 @@ public class RestaurantTableController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/cancelReservation/{tableId}")
+    public ResponseEntity<RestaurantTable> cancelReservation(@PathVariable int tableId, @RequestBody String reservedBy){
+        var result = restaurantTableService.cancelReservation(tableId, reservedBy);
+
+        if (result == null){
+            return ResponseEntity.status(404).body(result);
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/deleteRestaurantTable/{id}")
+    public ResponseEntity<RestaurantTable> deleteRestaurantTable(@PathVariable int id){
+        restaurantTableService.deleteRestaurantTable(id);
+
+        return ResponseEntity.status(204).body(null);
     }
 
 

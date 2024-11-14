@@ -51,4 +51,15 @@ public class RestaurantManager implements RestaurantService {
         return restaurants;
     }
 
+    @Override
+    public void deleteRestaurant(int id) {
+        var restaurant = getRestaurantById(id);
+
+        if (restaurant == null){
+            return;
+        }
+
+        restaurantDao.deleteById(id);
+    }
+
 }

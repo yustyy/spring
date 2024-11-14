@@ -23,19 +23,19 @@ public class RestaurantTableManager implements RestaurantTableService {
 
 
     @Override
-    public RestaurantTable addRestaurantTable(AddRestaurantTableDto addRestaurantTableDto) {
+    public RestaurantTable addRestaurantTable(int capacity, int restaurantId) {
 
 
-        if (addRestaurantTableDto.getCapacity() < 1){
+        if (capacity < 1){
             return null;
         }
 
-        if (addRestaurantTableDto.getRestaurantId() < 1){
+        if (restaurantId < 1){
             return null;
         }
 
 
-        var restaurant = restaurantService.getRestaurantById(addRestaurantTableDto.getRestaurantId());
+        var restaurant = restaurantService.getRestaurantById(restaurantId);
 
         if (restaurant == null){
             return null;
@@ -43,7 +43,7 @@ public class RestaurantTableManager implements RestaurantTableService {
 
         var restaurantTable = RestaurantTable.builder()
                         .restaurant(restaurant)
-                                .capacity(addRestaurantTableDto.getCapacity())
+                                .capacity(capacity)
                                         .isReserved(false)
                                                 .build();
 
@@ -102,5 +102,39 @@ public class RestaurantTableManager implements RestaurantTableService {
         restaurantTable.setReservedBy(reservedBy);
 
         return restaurantTableDao.save(restaurantTable);
+    }
+
+    @Override
+    public RestaurantTable cancelReservation(int tableId, String reservedBy) {
+        var restaurantTable = getRestaurantTableById(tableId);
+
+        if (restaurantTable == null){
+            return null;
+        }
+
+        if (!restaurantTable.isReserved()){
+            return null;
+        }
+
+        if (!restaurantTable.getReservedBy().equals(reservedBy)){
+            return null;
+        }
+
+        restaurantTable.setReserved(false);
+        restaurantTable.setReservedBy(null);
+
+        return restaurantTableDao.save(restaurantTable);
+    }
+
+    @Override
+    public void deleteRestaurantTable(int id) {
+        var restaurantTable = getRestaurantTableById(id);
+
+        if (restaurantTable == null){
+            return;
+        }
+
+        restaurantTableDao.deleteById(id);
+
     }
 }

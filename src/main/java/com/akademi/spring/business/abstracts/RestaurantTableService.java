@@ -8,7 +8,7 @@ import java.util.List;
 public interface RestaurantTableService {
 
 
-    RestaurantTable addRestaurantTable(AddRestaurantTableDto addRestaurantTableDto);
+    RestaurantTable addRestaurantTable(int capacity, int restaurantId);
 
     RestaurantTable getRestaurantTableById(int id);
 
@@ -16,8 +16,11 @@ public interface RestaurantTableService {
 
     List<RestaurantTable> getRestaurantTablesByRestaurantId(int id);
 
-
     RestaurantTable reserveTable(int id, String reservedBy);
+
+    RestaurantTable cancelReservation(int tableId, String reservedBy);
+
+    void deleteRestaurantTable(int id);
 
 
 }

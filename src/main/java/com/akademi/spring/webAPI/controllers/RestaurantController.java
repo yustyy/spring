@@ -2,6 +2,7 @@ package com.akademi.spring.webAPI.controllers;
 
 import com.akademi.spring.business.abstracts.RestaurantService;
 import com.akademi.spring.entities.Restaurant;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,5 +52,12 @@ public class RestaurantController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/deleteRestaurant/{id}")
+    public ResponseEntity<Restaurant> deleteRestaurant(@PathVariable int id) {
+        restaurantService.deleteRestaurant(id);
+
+        return ResponseEntity.status(204).body(null);
     }
 }
